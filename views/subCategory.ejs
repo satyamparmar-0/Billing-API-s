@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subcategory</title>
+</head>
+<body>
+  <h1>Subcategory Page</h1>
+  <form action="/subcategories" method="POST">
+    <label for="category">Select a Category:</label>
+    <select name="category" id="category">
+      <% categories.forEach(category => { %>
+        <option value="<%= category._id %>"><%= category.name %></option>
+      <% }); %>
+    </select>
+    <br>
+    <label for="subcategory">Select a Subcategory:</label>
+    <select name="subcategory" id="subcategory">
+      <% subcategories.forEach(subcategory => { %>
+        <option value="<%= subcategory._id %>"><%= subcategory.name %></option>
+      <% }); %>
+    </select>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>

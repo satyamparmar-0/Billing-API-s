@@ -1,0 +1,95 @@
+<!-- views/about.ejs -->
+
+<style>
+    /* Additional styles for the about page */
+    section {
+        margin-bottom: 20px;
+    }
+
+    #interactive-container {
+        text-align: center;
+        padding: 20px;
+        background-color: #f8f8f8;
+        border-radius: 8px;
+    }
+
+    #interactive-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+    }
+
+    #interactive-message {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+    nav{
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        color: rgba(62, 4, 4, 0.105);
+    }
+
+    ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+li {
+  float: left;
+  
+}
+
+li a {
+  text-decoration: none;
+  color: #333;
+  padding: 10px;
+  display: block;
+  transition: background-color 0.3s;
+}
+
+li a:hover {
+  background-color: #f0f0f0;
+}
+
+</style>
+
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/users/profile">User Profile</a></li>
+        <li><a href="/users/menu">Menu</a></li>
+        <li><a href="/order">Order Processing</a></li>
+        <li><a href="/billing">Billing and Invoicting</a></li>
+        <li><a href="/table">Tables</a></li>
+        <li><a href="/inventory">Inventory</a></li>
+        <li><a href="/analytics">Analytics</a></li>
+        <li><a href="/crm">History</a></li>
+        <li><a href="/logout">Logout</a></li>
+        <!-- Add more navigation links as needed -->
+    </ul>
+</nav>
+
+<section>
+    <h2>User <%= user.username %></h2>
+    <p>We are a fantastic team working on amazing projects!</p>
+</section>
+
+<section>
+    <h3>User Can Only See This after Login</h3>
+    <div id="interactive-container">
+        <button id="interactive-button">Click Me</button>
+        <p id="interactive-message"></p>
+    </div>
+</section>
+
+<script>
+    // Your JavaScript code can go here
+    document.getElementById('interactive-button').addEventListener('click', function() {
+        document.getElementById('interactive-message').innerText = 'Button clicked!';
+    });
+</script>
