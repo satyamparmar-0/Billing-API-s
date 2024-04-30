@@ -15,7 +15,7 @@ router.use(session({
     secret: 'process.env.SESSION_SECRET',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set secure to true if your site is served over HTTPS
+    cookie: { secure: false } 
   }));
 
 const User = require('../models/user');
@@ -30,17 +30,18 @@ exports.RenderLogin = (req,res)=>{
 
 exports.Signup = async(req,res)=>{
     try{
-        const {username,password} = req.body;
+        const {email,fullname,role,username,password} = req.body;
         const hashedPassword = await bcrypt.hash(password,10);
         const newUser = new User({
+            email,
+            fullname,
+            role,
             username,
             password,
         })
-
         await newUser.save();
         res.json('User Successfully Created ');
         // res.render('login');
-
     }
     catch(error){
         res.send(`Error While Signing up ${error}`);
@@ -50,28 +51,27 @@ exports.Signup = async(req,res)=>{
 
 exports.Login = async(req,res)=>{
     try{
-
         const {username,password} = req.body;
-        
         const user = await User.findOne({ username });
-
         if(!user){
             return res.status(404).json({ message: 'User not found' });
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
 
-        // console.log(passwordMatch);
+        if (!user.active) {
+            return res.status(403).json({ error: 'User is inactive' });
+          }
 
-          if(!passwordMatch) {
-             return res.status(401).json({ message: 'Incorrect password' });
-             }
-
+        if(!passwordMatch) {
+            return res.status(401).json({ message: 'Incorrect password' });
+            }
+        
         // if (password !== user.password) {
         //     return res.status(401).json({ message: 'Incorrect pa ssword' });
         // }  
-
         // const SessionId = uuid(); we do not need session id when we are creating the tokens for the user 
+
         const token = SetUser(user);
         res.cookie('uid',token, { httpOnly: true })
         res.json("Success");
@@ -82,4 +82,35 @@ exports.Login = async(req,res)=>{
         
     }
 }
-    
+
+exports.GetProfile = async(req,res)=>{
+    const {username} = req.params;
+    try {
+        const user = await User.findOne({username});
+        if(!user){
+            res.status(404).json({error:"user is not found"});
+        }
+        res.json(user)
+    } catch (error) {
+        console.error('Error retrieving user profile:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+exports.deleteUser = async (req, res) => {
+    const { username } = req.params;
+    try {
+        const user = await User.findOne({ username });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        user.active = false;
+        await user.save();
+
+        return res.status(200).json({ message: 'User deactivated successfully' });
+    } catch (error) {
+        console.error('Error deactivating user:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};

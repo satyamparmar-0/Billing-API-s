@@ -9,7 +9,6 @@ const categorySchema = new mongoose.Schema({
     maxlength: [50, 'Category name cannot exceed 50 characters'],
   },
   description: String,
-  default: '',
 });
 
 const Category = mongoose.model('Category', categorySchema);

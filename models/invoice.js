@@ -22,7 +22,7 @@ const InvoiceSchema = new mongoose.Schema({
      type: Date,
      default: Date.now
     },
-    updated_at:{
+    updated_at:{ 
      type: Date,
      default: Date.nowe
     }

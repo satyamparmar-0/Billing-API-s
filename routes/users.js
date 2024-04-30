@@ -1,20 +1,15 @@
 var express = require('express');
 var router = express.Router();
 const UserController = require('../controllers/user');
-//const authenticationToken = require('../middlewares/auth');
-
-
-
-/* GET users listing. */
-// router.get('/', function(req, res, next) {
-//   res.send('respond with a resource');
-// });
+const {restrictToUserLoginOnly} = require('../middlewares/auth')
 
 router.get('/signup',UserController.RenderSignup);
 router.get('/login',UserController.RenderLogin);
 
 router.post('/signup',UserController.Signup);
 router.post('/login',UserController.Login);
+router.get('/getProfile/:username',restrictToUserLoginOnly,UserController.GetProfile);
+router.delete('/deleteUser/:username',UserController.deleteUser);
 // Apply authentication middleware to protected routes
 // router.get('/protected', authenticationToken, (req, res) => {
 //   // Access user ID using req.userId
