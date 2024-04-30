@@ -15,7 +15,7 @@ router.use(session({
     secret: 'process.env.SESSION_SECRET',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set secur  e to true if your site is served over HTTPS
+    cookie: { secure: false } // Set secure to true if your site is served over HTTPS
   }));
 
 const User = require('../models/user');
@@ -68,7 +68,7 @@ exports.Login = async(req,res)=>{
              }
 
         // if (password !== user.password) {
-        //     return res.status(401).json({ message: 'Incorrect password' });
+        //     return res.status(401).json({ message: 'Incorrect pa ssword' });
         // }  
 
         // const SessionId = uuid(); we do not need session id when we are creating the tokens for the user 
@@ -82,3 +82,4 @@ exports.Login = async(req,res)=>{
         
     }
 }
+    

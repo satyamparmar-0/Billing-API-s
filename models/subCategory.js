@@ -12,7 +12,19 @@ const subcategorySchema = new mongoose.Schema({
     ref: 'Category',
     required: true,
   },
+  created_at:{
+    type: Date,
+    default: Date.now
+   },
+   updated_at:{
+    type: Date,
+    default: Date.nowe
+   }
 });
+
+
+
+subcategorySchema.index({ category: 1 });
 
 const Subcategory = mongoose.model('Subcategory', subcategorySchema);
 

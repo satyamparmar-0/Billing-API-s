@@ -1,7 +1,4 @@
-// controllers/categoryController.js
-
 const Category = require('../models/category');
-
 // Controller function to create a new category
 async function createCategory(req, res) {
     try {
@@ -51,5 +48,5 @@ module.exports = {
     createCategory,
     getAllCategories,
     updateCategory,
-    deleteCategory
+    deleteCategory,
 };

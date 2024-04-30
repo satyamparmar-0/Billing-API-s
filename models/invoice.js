@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const InvoiceSchema = new mongoose.Schema({
-    invoiceId:{
-        type:Number,
-        required:true
-    },
     orderId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Order',
@@ -21,6 +17,14 @@ const InvoiceSchema = new mongoose.Schema({
     totalAmount:{
        type:Number,
         required:true
+    },
+    created_at:{
+     type: Date,
+     default: Date.now
+    },
+    updated_at:{
+     type: Date,
+     default: Date.nowe
     }
 })
 

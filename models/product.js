@@ -24,7 +24,18 @@ const productSchema = new mongoose.Schema({
     type:Number,
     required:false
   },
-  // Add more fields as needed
+  quantity_available:{
+    type:Number,
+    required:false
+  },
+  created_at:{
+   type: Date,
+   default: Date.now
+  },
+  updated_at:{
+   type: Date,
+   default: Date.nowe
+  }
 });
 
 const Product = mongoose.model('Product', productSchema);

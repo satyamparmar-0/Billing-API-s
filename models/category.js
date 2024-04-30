@@ -5,8 +5,11 @@ const categorySchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    minlength: [2, 'Category name must be at least 2 characters long'],
+    maxlength: [50, 'Category name cannot exceed 50 characters'],
   },
   description: String,
+  default: '',
 });
 
 const Category = mongoose.model('Category', categorySchema);

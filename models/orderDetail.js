@@ -10,14 +10,14 @@ const orderDetailSchema = new mongoose.Schema({
         ref:"Order",
         required:true
     },
-    quantity:{
+    quantity:{  
         type:Number,
         required:true
     },
     unitPrice:{
         type:Number,
     }
-})
+})  
 
 const OrderDetail = mongoose.model('OrderDetail',orderDetailSchema);
 
