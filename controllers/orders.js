@@ -87,7 +87,6 @@ const updateOrder = async (req, res) => {
     }
 };
 
-
 const getAllOrdersByUserId = async (req, res) => {
     const { user_id } = req.body;
     try {
