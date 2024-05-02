@@ -77,8 +77,7 @@ const updateOrder = async (req, res) => {
         existingOrder.items = orderItems;
         existingOrder.total_amount = totalAmount;
         existingOrder.status = status;
-
-        // Save the updated order
+        
         await existingOrder.save();
         res.status(200).json({ message: 'Order updated successfully', order: existingOrder });
     } catch (error) {

@@ -1,17 +1,36 @@
-// controllers/productController.js
 const Product = require('../models/product');
+var multer = require('multer');
+var fs = require('fs');
+var path = require('path');
 
-// Controller function to create a new product
 async function createProduct(req, res) {
-    try {
-        const { name, description, price, categoryId, subcategoryId, discount } = req.body;
-        const product = new Product({ name, description, price, category: categoryId, subcategory: subcategoryId, discount });
-        await product.save();
-        res.status(201).json({ success: true, data: product });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+      const { name, description, price, categoryId, subcategoryId, discount, image } = req.body;
+
+      const imageData = Buffer.from(image, 'base64');
+
+      // Create a new product instance with the image data
+      const product = new Product({ 
+          name,   
+          description, 
+          price, 
+          category: categoryId, 
+          subcategory: subcategoryId, 
+          discount,
+          image: imageData 
+      });
+
+      // Save the product to the database
+      await product.save();
+
+      // Send success response with the created product data
+      res.status(201).json({ success: true, data: product });
+  } catch (error) {
+      // Handle errors
+      res.status(500).json({ success: false, error: error.message });
+  }
 }
+
 
 // Controller function to get all products
 async function getAllProducts(req, res) {
@@ -88,11 +107,15 @@ const getProducts = async (req, res) => {
     }
   }
 
+
+
 module.exports = {
     createProduct,
     getAllProducts,                                                                                                                         
     updateProduct,
     deleteProduct,
     getProducts,
-    getByCategory
+    getByCategory,
 };
+
+//module.exports = upload.single('image'), createProduct,getAllProducts,updateProduct,deleteProduct,getProducts,getByCategory;

@@ -28,6 +28,10 @@ const productSchema = new mongoose.Schema({
     type:Number,
     required:false
   },
+  image:{
+    type:Buffer,
+    required:false
+  },
   created_at:{
    type: Date,
    default: Date.now

@@ -1,186 +1,47 @@
-// Online C++ compiler to run C++ program online
-#include<bits/stdc++.h>
-using namespace std;
+const Product = require('../models/product');
+const fs = require('fs');
+const path = require('path');
 
-void selection(int arr[],int n){
-    for(int i=0;i<n-1;i++){
-        int minindex = i;
-        for(int j=i+1;j<n;j++){
-            if(arr[j]<arr[minindex]){
-                minindex = j;
+const createProduct = async (req, res) => {
+    try {
+        const { name, description, price, categoryId, subcategoryId, discount } = req.body;
+        
+        // Check if image file was uploaded
+        if (!req.file) {
+            return res.status(400).json({ success: false, error: 'Image file is required' });
+        }
+
+        // Read image file
+        const imageData = fs.readFileSync(req.file.path);
+
+        // Create new product instance
+        const product = new Product({
+            name,
+            description,
+            price,
+            category: categoryId,
+            subcategory: subcategoryId,
+            discount,
+            image: {
+                data: imageData,
+                contentType: req.file.mimetype // Set content type based on uploaded file type
             }
-        }
-        if(minindex!=i){
-            swap(arr[i],arr[minindex]);
-        }
-    }
-}
-void insertion(int arr[], int n){
-    for(int i=1;i<n;i++){
-        int j = i-1;
-        int key = arr[i];
-        while(j>=0 && key<arr[j]){
-            swap(arr[j],arr[j+1]);
-            j--;
-        }
-        arr[j+1] = key;
-    }
-}
-void merge(int arr[],int low,int mid,int high){
-    int l;
-    int r;
-    l = mid-low+1;
-    r = high-mid;
-    
-    int larray[l];
-    int rarray[r];
-    
-    for(int i=0;i<l;i++){
-        larray[i] = arr[low+i];
-    }
-    for(int j=0;j<r;j++){
-        rarray[j] = arr[mid +1 +j];
-    }
-    
-    int i = 0;
-    int j = 0;
-    int k = low;
-    
-    while(i<l && j<r){
-        if(larray[i]<=rarray[j]){
-            arr[k] = larray[i];
-            i++;
-        }
-        else{
-            arr[k] = rarray[j];
-            j++;
-        }
-        k++;
-    }
-    
-    while(i<l){
-        arr[k] = larray[i];
-        i++;
-        k++;
-    }
-    while(j<r){
-        arr[k] = rarray[j];
-        j++;
-        k++;
-    }
-    
-}
-void mergeSort(int arr[],int low,int high){
-    
-    if(low<high){
-        int mid = (low + high) / 2;
-        mergeSort(arr,low,mid);
-        mergeSort(arr,mid+1,high);
-        merge(arr,low,mid,high);
-    }
-    
-}
-int linear(int *arr,int n,int element){
-    for(int i=0;i<n;i++){
-        if(arr[i]==element){
-            return i;
-        }
-    }
-    return -1;
-}
-int binary(int arr[],int n,int element){
-    mergeSort(arr,0,n-1);
-    int low = 0;
-    int high = n-1;
-    while(low<=high){
-         int mid = low + (high - low) / 2;
-        if(arr[mid]==element){
-            return mid;
-        }
-        else if(arr[mid]<element){
-            low = mid+1;
-        }
-        else{
-            high = mid-1;
-        }
-    }
-    return -1;
-}
+        });
 
-void reverse(string &s){
-    int l = s.length();
-    int low = 0;
-    int high = l-1;
-    while(low<high){
-        swap(s[low],s[high]);
-        low++;
-        high--;
+        // Save product to the database
+        await product.save();
+
+        // Remove temporary file after reading
+        fs.unlinkSync(req.file.path);
+
+        // Respond with success message and product data
+        res.status(201).json({ success: true, data: product });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
     }
-}
+};
 
-char maxFrequency(const string &s){
-    unordered_map<char,int>freq;
-    
-   for(char c:s){
-       freq[c]++;
-   }
-   char ch = '\0';
-   int maxfrequency = 0;
-   
-   for(auto &it:freq){
-       if(it.second>maxfrequency){
-           ch = it.first;
-           maxfrequency = it.second;
-       }
-   }
-   return ch;
-    
-}
-
-string removeDuplicates(string &s){
-    int l = s.length();
-    int index = 0;
-    for(int i=0;i<l;i++){
-        int j;
-        for(j=0;j<i;j++){
-            if(s[i]==s[j]){
-                break;
-            }
-        }
-        if(j==i){
-            s[index++] = s[i];
-        }
-    }
-    s[index]= '\0';
-    return s;
-}
-
-int removeDuplicatesArray(int arr[],int n){
-    int i = 0;
-    for(int j=1;j<n;j++){
-        if(arr[i]!=arr[j]){
-            i++;
-            arr[i] = arr[j];
-        }
-    }
-    return i+1;
-}
-
-int main() {
-int n = 5;
-int arr[] = {23,2,24,7,87};
-int element = 7;
-int ans = binary(arr,n,element);
-cout<<ans;
-    return 0;
-}
-
-
-
-/*
-low = 0;
-mid = 2;
-high = 5;
-linear search
-binary search 2 7 23 24 87
-*/
+module.exports = {
+    createProduct
+};
