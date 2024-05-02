@@ -1,9 +1,8 @@
 const Payment = require('../models/payments')
 const Order = require('../models/orders')
-const Publishablekey = 'pk_test_51PBxZ8SHttKUoHIEiBVhe9shC4vuXPDMre4kKN4qqrG08LGGvoyAN5b9twusJKQ4x6aI29YdY4eanZDLYBRjRK9B00JhKlaKR1'
-const Secret_key = 'sk_test_51PBxZ8SHttKUoHIETED0WUfvH4EZ7aFgFbR3HrNAv3mlUMld1yrwjkCSq8iCk7Ou6qaNfpMgCjvtLbFIEL281E1u00sqy0rlqg'
-const stripe = require('stripe')(Secret_key)
-
+require('dotenv').config(); 
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripe = require('stripe')(stripeSecretKey)
 const createPayment = async (req, res) => {
     try {
         const orderId = req.body.orderId;
