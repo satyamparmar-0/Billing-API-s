@@ -1,33 +1,41 @@
 const mongoose = require('mongoose');
 
 const PaymentSchema = new mongoose.Schema({
-    invoice_id:{
+    user_id:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Invoice'
+        ref:'User',
     },
-    payment_date:{
-        type:Date,
-        default:Date.now
+    order_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Order',
+        required: true
     },
-    amount:{
-        type:Number,
-        required:true
+    invoice_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Invoice'
     },
-    payment_method:{
-        type:String,
-        required:false
+    payment_date: {
+        type: Date,
+        default: Date.now
     },
-   created_at:{
-    type: Date,
-    default: Date.now
-   },
-   updated_at:{
-    type: Date,
-    default: Date.nowe
-   }
+    amount: {
+        type: Number,
+        required: true
+    },
+    payment_method: {
+        type: String,
+        required: false
+    },
+    created_at: {
+        type: Date,
+        default: Date.now
+    },
+    updated_at: {
+        type: Date,
+        default: Date.now
+    }
+});
 
-})
-
-const Payment = mongoose.model('Payment',PaymentSchema);
+const Payment = mongoose.model('Payment', PaymentSchema);
 
 module.exports = Payment;
