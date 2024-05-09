@@ -1,4 +1,5 @@
 const ContactUs = require('../models/contactus');
+const Invoice = require('../models/invoice');
 
 const postContact = async(req,res)=>{
     try {
@@ -20,7 +21,7 @@ const postContact = async(req,res)=>{
 const getContact = async(req,res)=>{
     try{
         const user = await ContactUs.find();
-        res.status({success:true,data:user});
+        res.status(200).json({success:true,data:user});
     }
     catch(error){
         res.status(500).json({ error: 'Internal Server Error' });

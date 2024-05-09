@@ -1,33 +1,51 @@
 const mongoose = require('mongoose');
 
 const InvoiceSchema = new mongoose.Schema({
-    orderId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Order',
-        required:true
+    order_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Order',
+        required: true
     },
-    invoiceDate:{
-        type:Date,
-        default:Date.now
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
-    paymenStatus:{
+    items: [{
+        product_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true
+        },
+        quantity: {
+            type: Number,
+            required: true
+        },
+        price: {
+            type: Number,
+            required: true
+        },
+        product_name: {
+            type: String,
+            required: true
+        },
+    }],
+    total_amount: {
+        type: Number,
+        required: true
+    },
+    status:{
         type:Boolean,
         default:false
     },
-    totalAmount:{
-       type:Number,
-        required:true
+    GST:{
+        type:Number
     },
-    created_at:{
-     type: Date,
-     default: Date.now
-    },
-    updated_at:{ 
-     type: Date,
-     default: Date.nowe
+    created_at: {
+        type: Date,
+        default: Date.now
     }
-})
+});
 
-const Invoice = mongoose.model('Invoice',InvoiceSchema);
+const Invoice = mongoose.model('Invoice', InvoiceSchema);
 
 module.exports = Invoice;
