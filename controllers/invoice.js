@@ -1,7 +1,8 @@
 const Order = require('../models/orders');
 const User = require('../models/user');
 const Invoice = require('../models/invoice');
-
+var easyinvoice = require('easyinvoice');
+const fs = require('fs')
 const createInvoice = async (req, res) => {
     try {
         const { order_id, user_id,GST } = req.body;
@@ -31,8 +32,21 @@ const createInvoice = async (req, res) => {
         });
 
         await invoice.save();
+        
+        const data = {
+            products: orderList
+        };
+        
+        easyinvoice.createInvoice(data, async function (result) {
+            try {
+                await fs.writeFileSync("invoice.pdf", result.pdf, 'base64');
+                res.status(200).json({ success: true, message: "Invoice created successfully" });
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ success: false, message: "Error creating PDF invoice" });
+            }
+        });
 
-        res.status(200).json({ success: true, message: "Invoice created successfully" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -65,4 +79,4 @@ const getByUser = async(req,res)=>{
 module.exports = { createInvoice, 
                    getInvoice,
                    getByUser
-};
+                };
