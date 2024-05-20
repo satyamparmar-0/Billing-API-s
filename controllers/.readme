@@ -45,3 +45,81 @@ const createProduct = async (req, res) => {
 module.exports = {
     createProduct
 };
+
+// for create order 
+
+/*
+const Product = require('../models/productModel'); // Adjust the path as necessary
+const Order = require('../models/orderModel'); // Adjust the path as necessary
+
+const createOrder = async (req, res) => {
+    try {
+        const { items, discountType, discountValue, transportCost, invoiceTax } = req.body;
+
+        if (!items || !Array.isArray(items) || items.length === 0) {
+            return res.status(400).json({ error: 'Items are required to create an order' });
+        }
+
+        let orderItems = [];
+        let subTotal = 0;
+        
+        for (const item of items) {
+            const { product_id, quantity } = item;
+
+            if (!product_id || !quantity) {
+                return res.status(400).json({ error: 'Product ID and quantity are required for each item' });
+            }
+
+            const product = await Product.findById(product_id);
+
+            if (!product) {
+                return res.status(404).json({ error: `Product with ID ${product_id} not found` });
+            }
+
+            const itemTotal = product.price * quantity;
+            subTotal += itemTotal;
+            orderItems.push({
+                product_id,
+                product_name: product.name,
+                quantity,
+                price: product.price,
+                itemTotal
+            });
+        }
+
+        // Apply discount
+        let discountAmount = 0;
+        if (discountType === 'Fixed') {
+            discountAmount = discountValue;
+        } else if (discountType === 'Percentage') {
+            discountAmount = (discountValue / 100) * subTotal;
+        }
+
+        // Calculate total amount
+        const totalAmountBeforeTax = subTotal - discountAmount + transportCost;
+        const taxAmount = (invoiceTax / 100) * totalAmountBeforeTax;
+        const totalAmount = totalAmountBeforeTax + taxAmount;
+
+        const newOrder = new Order({
+            items: orderItems,
+            sub_total: subTotal,
+            discount_type: discountType,
+            discount_value: discountValue,
+            discount_amount: discountAmount,
+            transport_cost: transportCost,
+            invoice_tax: invoiceTax,
+            tax_amount: taxAmount,
+            total_amount: totalAmount,
+        });
+
+        await newOrder.save();
+        res.status(201).json({ message: 'Order created successfully', order: newOrder });
+    } catch (error) {
+        console.error('Error creating order:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+module.exports = createOrder;
+
+*/
