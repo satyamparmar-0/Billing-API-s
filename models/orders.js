@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
+    // user_id will not be used
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -28,7 +29,7 @@ const OrderSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ['pending', 'completed', 'cancelled'],
-        default: 'pending'
+        // default: 'pending'
     },
     created_at: {
         type: Date,

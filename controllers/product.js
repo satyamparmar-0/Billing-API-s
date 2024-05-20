@@ -5,7 +5,7 @@ var path = require('path');
 
 async function createProduct(req, res) {
   try {
-      const { name, description, price, categoryId, discount, image } = req.body;
+      const { name, description, price, categoryId,subcategoryId, discount, image } = req.body;
 
       const imageData = Buffer.from(image, 'base64');
 
@@ -14,6 +14,7 @@ async function createProduct(req, res) {
           name,   
           description, 
           price, 
+          subcategory:subcategoryId,
           category: categoryId,
           discount,
           image: imageData 

@@ -1,9 +1,9 @@
-const Table = require('../models/table.models.user');
+const UserTable = require('../models/table.models.user');
 
 const Booktable = async(req,res)=>{
     try {
         const {Date,selectTime,totalGuests,fullName,email,phone,message}= req.body;
-        const newTable = new Table({
+        const newTable = new UserTable({
             Date,
             selectTime,
             totalGuests,
@@ -24,7 +24,7 @@ const updateTable = async (req, res) => {
         const table_id = req.params.id;
         const { Date, selectTime, totalGuests, fullName, email, phone, message } = req.body;
         
-        const updatedTable = await Table.findByIdAndUpdate(
+        const updatedTable = await UserTable.findByIdAndUpdate(
             table_id,
             { Date, selectTime, totalGuests, fullName, email, phone, message },
             { new: true }
@@ -43,13 +43,13 @@ const updateTable = async (req, res) => {
 const deleteTable = async (req, res) => {
     try {
         const table_id = req.params.id;
-        const table = await Table.findById(table_id);
+        const table = await UserTable.findById(table_id);
         
         if (!table) {
             return res.status(404).json({ success: false, message: "Table Not Found" });
         }
         
-        await Table.findByIdAndDelete(table_id);
+        await UserTable.findByIdAndDelete(table_id);
         res.status(200).json({ success: true, message: "Table Deleted" });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal server error" });
@@ -58,7 +58,7 @@ const deleteTable = async (req, res) => {
 
 const getTable = async(req,res)=>{
     try {
-        const tables = await Table.find();
+        const tables = await UserTable.find();
         res.status(200).json({success:true,data:tables});
     } catch (error) {
         res.status(500).json({success:false,message:"Internal server error"});

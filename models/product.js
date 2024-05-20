@@ -15,11 +15,11 @@ const productSchema = new mongoose.Schema({
     ref: 'Category',
     required: true,
   },
-  // subcategory: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'Subcategory',
-  //   required: true,
-  // },
+  subcategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Subcategory',
+    required: true,
+  },
   discount:{
     type:Number,
     required:false

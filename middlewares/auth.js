@@ -28,7 +28,7 @@ const authenticateUser = async (req, res, next) => {
 };
 
 // const SessionIdToUserMap = new Map(); if we are creating the token we do not require sessions we will create a token for the user 
- 
+ // IT WILL ONLY RESPONSE THE LOGIN USERS
 function SetUser(User){
     return jwt.sign({
         _id:User.id,

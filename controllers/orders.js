@@ -4,7 +4,7 @@ const User = require('../models/user');
 
 const createOrder = async (req, res) => {
     try {
-        const { user_id, items, status } = req.body;
+        const { user_id, items } = req.body;
         let orderItems = [];
         for (const item of items) {
             const { product_id, quantity } = item;
@@ -27,7 +27,6 @@ const createOrder = async (req, res) => {
             user_id,
             items: orderItems,
             total_amount: totalAmount,
-            status
         });
 
         await newOrder.save();

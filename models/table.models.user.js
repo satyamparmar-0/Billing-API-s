@@ -30,6 +30,6 @@ const tableSchema = new mongoose.Schema({
     }
 },{timestamps:true})
 
-const Table = mongoose.model('Table',tableSchema);
+const UserTable = mongoose.model('UserTable',tableSchema);
 
-module.exports = Table;
+module.exports = UserTable;
