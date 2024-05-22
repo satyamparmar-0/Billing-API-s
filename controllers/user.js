@@ -83,6 +83,16 @@ exports.Login = async(req,res)=>{
     }
 }
 
+exports.logout = async (req, res) => {
+    try {
+        res.clearCookie('uid');
+        res.json({ message: 'Successfully logged out' });
+    } catch (error) {
+        res.status(500).json({ message: `Error while logging out: ${error.message}` });
+    }
+};
+
+
 exports.GetProfile = async(req,res)=>{
     const {username} = req.params;
     try {

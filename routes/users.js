@@ -8,6 +8,7 @@ router.get('/login',UserController.RenderLogin);
 
 router.post('/signup',UserController.Signup);
 router.post('/login',UserController.Login);
+router.post('/logout',UserController.logout)
 router.get('/getProfile/:username',restrictToUserLoginOnly,UserController.GetProfile);
 router.delete('/deleteUser/:username',UserController.deleteUser);
 // Apply authentication middleware to protected routes

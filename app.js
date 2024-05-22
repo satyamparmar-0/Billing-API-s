@@ -15,6 +15,7 @@ var paymentRoutes = require('./routes/payments');
 var contactUsRoutes = require('./routes/contactus');
 var invoiceRoutes = require('./routes/invoice');
 var userTableRoutes = require('./routes/table.routes.user');
+var ownerRoutes = require('./routes/table.routes.owner');
 require('dotenv').config();
 const {restrictToUserLoginOnly} = require('./middlewares/auth')
 const cors = require('cors');
@@ -45,6 +46,7 @@ app.use('/',paymentRoutes);
 app.use('/',contactUsRoutes);
 app.use('/',invoiceRoutes);
 app.use('/',userTableRoutes);
+app.use('/',ownerRoutes);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
