@@ -5,32 +5,37 @@ var path = require('path');
 
 async function createProduct(req, res) {
   try {
-      const { name, description, price, categoryId,subcategoryId, discount, image } = req.body;
+    const { itemname, description, baseprice, categoryId, subcategoryId, discount, quantityavailable, image, cuisine, foodtype, customizations, filters } = req.body;
 
-      const imageData = Buffer.from(image, 'base64');
+    // Convert image from base64 if provided
+    const imageData = image ? Buffer.from(image, 'base64') : undefined;
 
-      // Create a new product instance with the image data
-      const product = new Product({ 
-          name,   
-          description, 
-          price, 
-          subcategory:subcategoryId,
-          category: categoryId,
-          discount,
-          image: imageData 
-      });
+    // Create a new product instance with the provided data
+    const product = new Product({
+      itemname,
+      description,
+      baseprice,
+      category: categoryId,
+      subcategory: subcategoryId,
+      discount,
+      quantityavailable,
+      image: imageData,
+      cuisine,
+      foodtype,
+      customizations,
+      filters
+    });
+     
+    // Save the product to the database
+    await product.save();
 
-      // Save the product to the database
-      await product.save();
-
-      // Send success response with the created product data
-      res.status(201).json({ success: true, data: product });
+    // Send success response with the created product data
+    res.status(201).json({ success: true, data: product });
   } catch (error) {
-      // Handle errors
-      res.status(500).json({ success: false, error: error.message });
+    // Handle errors
+    res.status(500).json({ success: false, error: error.message });
   }
 }
-
 
 // Controller function to get all products
 async function getAllProducts(req, res) {
@@ -46,8 +51,8 @@ async function getAllProducts(req, res) {
 async function updateProduct(req, res) {
     try {
         const { id } = req.params;
-        const { name, description, price, categoryId, subcategoryId,discount } = req.body;
-        const product = await Product.findByIdAndUpdate(id, { name, description, price, category: categoryId, subcategory: subcategoryId,discount }, { new: true });
+        const { itemname, description, baseprice, categoryId, subcategoryId,discount,quantityavailable,image,cuisine,foodtype,customizations,filters } = req.body;
+        const product = await Product.findByIdAndUpdate(id, { itemname, description, baseprice, category: categoryId, subcategory: subcategoryId,discount,quantityavailable,image,cuisine,foodtype,customizations,filters }, { new: true });
         res.status(200).json({ success: true, data: product });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
