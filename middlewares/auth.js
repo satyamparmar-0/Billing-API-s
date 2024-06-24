@@ -27,24 +27,6 @@ const authenticateUser = async (req, res, next) => {
     }
 };
 
-// const SessionIdToUserMap = new Map(); if we are creating the token we do not require sessions we will create a token for the user 
- // IT WILL ONLY RESPONSE THE LOGIN USERS
-
-/* function SetUser(User){
-    return jwt.sign({
-        _id:User.id,
-        username:User.username
-    },process.env.SECRET_KEY,{ expiresIn: '1h' })
-    // SessionIdToUserMap.set(id,user)
-}
-
-function GetUser(token){
-    if(!token) return null;
-    return jwt.verify(token,process.env.SECRET_KEY);
-}
-
-*/
-
 function SetUser(user) {
     return jwt.sign(
         {
