@@ -100,19 +100,34 @@ exports.logout = async (req, res) => {
 };
 
 
-exports.GetProfile = async(req,res)=>{
-    const {email} = req.params;
+exports.GetProfile = async (req, res) => {
     try {
-        const user = await User.findOne({email});
-        if(!user){
-            res.status(404).json({error:"user is not found"});
+        const { email } = req.params;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
         }
-        res.json(user)
+
+        const loggedInUser = req.user; // Get authenticated user
+
+        // Check role-based access control
+        if (loggedInUser.role === 'admin' || loggedInUser.role === 'manager') {
+            // Admins and managers can access any user's profile
+            return res.json(user);
+        } else if (loggedInUser.role === 'user' && loggedInUser.email === email) {
+            // Regular users can only access their own profile
+            return res.json(user);
+        } else {
+            // Unauthorized access
+            return res.status(403).json({ error: "Access denied" });
+        }
     } catch (error) {
         console.error('Error retrieving user profile:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
+
 
 exports.deleteUser = async (req, res) => {
     const { email } = req.params;
