@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const UserController = require('../controllers/user');
+const UserController = require('../controllers/user.auth');
 const {restrictToUserLoginOnly,authenticateUser} = require('../middlewares/auth')
 
 router.get('/signup',UserController.RenderSignup);
