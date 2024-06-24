@@ -37,16 +37,16 @@ app.use(cors());
 DataToConnect();
 
 app.use('/users',restrictToUserLoginOnly,indexRouter);
-app.use('/', usersRouter);
-app.use('/category',categoryRoutes);
-app.use('/subcategory',subcategoryRoutes);
-app.use('/',productsRoutes);
-app.use('/',orderRoutes);
-app.use('/',paymentRoutes);
-app.use('/',contactUsRoutes);
-app.use('/',invoiceRoutes);
-app.use('/',userTableRoutes);
-app.use('/',ownerRoutes);
+app.use('/api', usersRouter);
+app.use('/api',categoryRoutes);
+app.use('/api',subcategoryRoutes);
+app.use('/api',productsRoutes);
+app.use('/api',orderRoutes);
+app.use('/api',paymentRoutes);
+app.use('/api',contactUsRoutes);
+app.use('/api',invoiceRoutes);
+app.use('/api',userTableRoutes);
+app.use('/api',ownerRoutes);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

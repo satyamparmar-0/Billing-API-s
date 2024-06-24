@@ -3,7 +3,7 @@ var multer = require('multer');
 var fs = require('fs');
 var path = require('path');
 
-async function createProduct(req, res) {
+async function  createProduct(req, res) {
   try {
     const { itemname, description, baseprice, categoryId, subcategoryId, discount, quantityavailable, image, cuisine, foodtype, customizations, filters } = req.body;
 
@@ -111,8 +111,6 @@ const getProducts = async (req, res) => {
       res.status(500).json({error:error.message});
     }
   }
-
-
 
 module.exports = {
     createProduct,

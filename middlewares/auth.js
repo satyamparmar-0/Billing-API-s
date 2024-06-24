@@ -11,8 +11,8 @@ const authenticateUser = async (req, res, next) => {
         }
 
         // Verify the token
-        const decoded = jwt.verify(token, process.env.SECRET_KEY);
-        const user = await User.findById(decoded.userId);
+        const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.SECRET_KEY);
+        const user = await User.findById(decoded._id);
 
         if (!user) {
             return res.status(401).json({ message: 'User not found.' });
@@ -29,7 +29,8 @@ const authenticateUser = async (req, res, next) => {
 
 // const SessionIdToUserMap = new Map(); if we are creating the token we do not require sessions we will create a token for the user 
  // IT WILL ONLY RESPONSE THE LOGIN USERS
-function SetUser(User){
+
+/* function SetUser(User){
     return jwt.sign({
         _id:User.id,
         username:User.username
@@ -40,6 +41,31 @@ function SetUser(User){
 function GetUser(token){
     if(!token) return null;
     return jwt.verify(token,process.env.SECRET_KEY);
+}
+
+*/
+
+function SetUser(user) {
+    return jwt.sign(
+        {
+            _id: user.id,
+            username: user.username,
+            role: user.role
+        },
+        process.env.SECRET_KEY,
+        { expiresIn: '1h' }
+    );
+}
+
+// Function to decode a JWT token
+function GetUser(token) {
+    if (!token) return null;
+    try {
+        return jwt.verify(token, process.env.SECRET_KEY);
+    } catch (error) {
+        console.error(`Error while decoding token: ${error}`);
+        return null;
+    }
 }
 
 async function restrictToUserLoginOnly(req,res,next){

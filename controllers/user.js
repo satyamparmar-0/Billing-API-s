@@ -6,9 +6,10 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const {v4:uuid} = require('uuid')
 const {SetUser} = require('../middlewares/auth')
+const User = require('../models/user');
+router.use(cookieParser());
 
 // Use cookie-parser middleware
-router.use(cookieParser());
 
 // Use express-session middleware
 router.use(session({
@@ -18,7 +19,6 @@ router.use(session({
     cookie: { secure: false } 
   }));
 
-const User = require('../models/user');
 
 exports.RenderSignup = (req,res) =>{
     res.render('signup');
@@ -27,61 +27,68 @@ exports.RenderSignup = (req,res) =>{
 exports.RenderLogin = (req,res)=>{
     res.render('login');
 }
-
-exports.Signup = async(req,res)=>{
-    try{
-        const {email,fullname,role,username,password} = req.body;
-        const hashedPassword = await bcrypt.hash(password,10);
+exports.Signup = async (req, res) => {
+    try {
+        const { email, fullname, role, username, password } = req.body;
         const newUser = new User({
             email,
             fullname,
             role,
             username,
             password,
-        })
+        });
         await newUser.save();
-        res.json('User Successfully Created ');
-        // res.render('login');
-    }
-    catch(error){
-        res.send(`Error While Signing up ${error}`);
-    
+        res.json('User Successfully Created');
+    } catch (error) {
+        res.status(500).send(`Error While Signing up: ${error.message}`);
     }
 }
 
-exports.Login = async(req,res)=>{
-    try{
-        const {username,password} = req.body;
-        const user = await User.findOne({ username });
-        if(!user){
+exports.Login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
-
         if (!user.active) {
             return res.status(403).json({ error: 'User is inactive' });
-          }
+        }
 
-        if(!passwordMatch) {
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
             return res.status(401).json({ message: 'Incorrect password' });
-            }
-        
-        // if (password !== user.password) {
-        //     return res.status(401).json({ message: 'Incorrect pa ssword' });
-        // }  
-        // const SessionId = uuid(); we do not need session id when we are creating the tokens for the user 
+        }
 
         const token = SetUser(user);
-        res.cookie('uid',token, { httpOnly: true })
-        res.json("Success");
-        //return res.redirect('/users/profile');
+        res.cookie('uid', token, { httpOnly: true, secure: true, sameSite: 'strict' });
+
+        let roleMessage;
+        switch (user.role) {
+            case 'admin':
+                roleMessage = 'Admin login successful';
+                break;
+            case 'manager':
+                roleMessage = 'Manager login successful';
+                break;
+            case 'user':
+            default:
+                roleMessage = 'User login successful';
+                break;
+        }
+
+        res.json({
+            message: roleMessage,
+            role: user.role,
+            token,
+        });
+    } catch (error) {
+        res.status(500).send(`Error while login: ${error.message}`);
     }
-    catch(error){
-        res.send(`Error while login ${error}`);
-        
-    }
-}
+};
+
 
 exports.logout = async (req, res) => {
     try {
@@ -94,9 +101,9 @@ exports.logout = async (req, res) => {
 
 
 exports.GetProfile = async(req,res)=>{
-    const {username} = req.params;
+    const {email} = req.params;
     try {
-        const user = await User.findOne({username});
+        const user = await User.findOne({email});
         if(!user){
             res.status(404).json({error:"user is not found"});
         }
@@ -108,9 +115,9 @@ exports.GetProfile = async(req,res)=>{
 }
 
 exports.deleteUser = async (req, res) => {
-    const { username } = req.params;
+    const { email } = req.params;
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ email });
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
@@ -124,3 +131,4 @@ exports.deleteUser = async (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
+
