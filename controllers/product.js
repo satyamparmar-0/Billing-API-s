@@ -1,16 +1,32 @@
 const Product = require('../models/product');
-var multer = require('multer');
-var fs = require('fs');
-var path = require('path');
+var cloudinary = require('cloudinary').v2;
+const upload = require('../middlewares/cloud.image');
 
-async function  createProduct(req, res) {
+cloudinary.config({ 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.API_KEY, 
+  api_secret: process.env.API_SECRET
+});
+async function createProduct(req, res) {
   try {
-    const { itemname, description, baseprice, categoryId, subcategoryId, discount, quantityavailable, image, cuisine, foodtype, customizations, filters } = req.body;
+    const file = req.files.image;
+    if (!file) {
+      return res.status(400).json({ success: false, error: "No image uploaded" });
+    }
 
-    // Convert image from base64 if provided
-    const imageData = image ? Buffer.from(image, 'base64') : undefined;
+    // Upload image to Cloudinary
+    const result = await cloudinary.uploader.upload(file.tempFilePath);
 
-    // Create a new product instance with the provided data
+    const {
+      itemname, description, baseprice, categoryId, subcategoryId,
+      discount, quantityavailable, cuisine, foodtype, customizations, filters
+    } = req.body;
+
+    // Parse customizations and filters
+    const parsedCustomizations = JSON.parse(customizations);
+    const parsedFilters = JSON.parse(filters);
+
+    // Create a new product instance with the provided data and Cloudinary image URL
     const product = new Product({
       itemname,
       description,
@@ -19,13 +35,13 @@ async function  createProduct(req, res) {
       subcategory: subcategoryId,
       discount,
       quantityavailable,
-      image: imageData,
+      image: result.url,
       cuisine,
       foodtype,
-      customizations,
-      filters
+      customizations: parsedCustomizations,
+      filters: parsedFilters
     });
-     
+
     // Save the product to the database
     await product.save();
 
@@ -36,6 +52,7 @@ async function  createProduct(req, res) {
     res.status(500).json({ success: false, error: error.message });
   }
 }
+
 
 // Controller function to get all products
 async function getAllProducts(req, res) {
@@ -111,6 +128,7 @@ const getProducts = async (req, res) => {
       res.status(500).json({error:error.message});
     }
   }
+
 
 module.exports = {
     createProduct,

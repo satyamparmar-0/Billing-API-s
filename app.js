@@ -19,7 +19,7 @@ var ownerRoutes = require('./routes/table.routes.owner');
 require('dotenv').config();
 const {restrictToUserLoginOnly} = require('./middlewares/auth')
 const cors = require('cors');
-
+const fileupload = require('express-fileupload')
 var app = express();
 
 // view engine setup
@@ -33,7 +33,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
-
+app.use(fileupload({
+  useTempFiles:true
+}));
 DataToConnect();
 
 app.use('/users',restrictToUserLoginOnly,indexRouter);

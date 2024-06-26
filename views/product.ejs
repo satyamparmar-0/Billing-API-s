@@ -1,39 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product</title>
-</head>
-<body>
-  <h1>Product Page</h1>
-  <form action="/products" method="POST">
-    <label for="category">Select a Category:</label>
-    <select name="category" id="category">
-      <% categories.forEach(category => { %>
-        <option value="<%= category._id %>"><%= category.name %></option>
-      <% }); %>
-    </select>
-    <br>
-    <label for="subcategory">Select a Subcategory:</label>
-    <select name="subcategory" id="subcategory">
-      <% subcategories.forEach(subcategory => { %>
-        <option value="<%= subcategory._id %>"><%= subcategory.name %></option>
-      <% }); %>
-    </select>
-    <br>
-    <label for="productName">Product Name:</label>
-    <input type="text" name="productName" id="productName" required>
-    <br>
-    <label for="productDescription">Product Description:</label>
-    <textarea name="productDescription" id="productDescription"></textarea>
-    <br>
-    <label for="productPrice">Product Price:</label>
-    <input type="number" name="productPrice" id="productPrice" required>
-    <!-- Add more fields as needed -->
-    <br>
-    <button type="submit">Submit</button>
-  </form>
-</body>
-</html>
+<!-- views/product.ejs -->
+<style>
+  /* Additional styles for the product page */
+  form {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f8f8f8;
+      border-radius: 8px;
+  }
+
+  label {
+      display: block;
+      margin-bottom: 8px;
+  }
+
+  input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+  }
+
+  button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+  }
+</style>
+
+<section>
+<h1>Product Page</h1>
+<form action="/api/products" method="POST">
+  <label for="categoryId">Category Name:</label>
+  <input type="text" name="categoryId" id="categoryId" required>
+  <br>
+  <label for="subcategoryId">Sub Category:</label>
+  <textarea name="subcategoryId" id="subcategoryId"></textarea>
+  <br>
+  <label for="productName">Product Name:</label>
+  <input type="text" name="itemname" id="productName" required>
+  <br>
+  <label for="productDescription">Product Description:</label>
+  <textarea name="description" id="productDescription"></textarea>
+  <br>
+  <label for="productPrice">Product Price:</label>
+  <input type="number" name="baseprice" id="productPrice" required>
+  <br>
+  <label for="discount">Discount:</label>
+  <input type="number" name="discount" id="discount">
+  <br>
+  <label for="quantity">Quantity Available:</label>
+  <input type="number" name="quantityavailable" id="quantity" required>
+  <br>
+  <label for="cuisine">Cuisine:</label>
+  <input type="text" name="cuisine" id="cuisine">
+  <br>
+  <label for="foodtype">Food Type:</label>
+  <input type="text" name="foodtype" id="foodtype">
+  <br>
+  <label for="customizations">Customizations:</label>
+  <input type="text" name="customizations" id="customizations">
+  <br>
+  <label for="filters">Filters:</label>
+  <input type="text" name="filters" id="filters">
+  <br>
+  <label for="image">Product Image:</label>
+  <input type="file" name="image" id="image" required>
+  <br>
+  <button type="submit">Submit</button>
+</form>
+</section>
