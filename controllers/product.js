@@ -65,16 +65,54 @@ async function getAllProducts(req, res) {
 }
 
 // Controller function to update a product
+// async function updateProduct(req, res) {
+//     try {
+//         const { id } = req.params;
+//         const { itemname, description, baseprice, categoryId, subcategoryId,discount,quantityavailable,image,cuisine,foodtype,customizations,filters } = req.body;
+//         const product = await Product.findByIdAndUpdate(id, { itemname, description, baseprice, category: categoryId, subcategory: subcategoryId,discount,quantityavailable,image,cuisine,foodtype,customizations,filters }, { new: true });
+//         res.status(200).json({ success: true, data: product });
+//     } catch (error) {
+//         res.status(500).json({ success: false, error: error.message });
+//     }
+// } 
+
 async function updateProduct(req, res) {
-    try {
-        const { id } = req.params;
-        const { itemname, description, baseprice, categoryId, subcategoryId,discount,quantityavailable,image,cuisine,foodtype,customizations,filters } = req.body;
-        const product = await Product.findByIdAndUpdate(id, { itemname, description, baseprice, category: categoryId, subcategory: subcategoryId,discount,quantityavailable,image,cuisine,foodtype,customizations,filters }, { new: true });
-        res.status(200).json({ success: true, data: product });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-} 
+  try {
+      const { id } = req.params;
+      const { itemname, description, baseprice, categoryId, subcategoryId, discount, quantityavailable, cuisine, foodtype, customizations, filters } = req.body;
+      let updateFields = { itemname, description, baseprice, category: categoryId, subcategory: subcategoryId, discount, quantityavailable, cuisine, foodtype, customizations, filters };
+
+      // Check if new image file is included in request
+      if (req.files && req.files.image) {
+          const file = req.files.image;
+
+          // Upload new image to Cloudinary
+          const uploadResult = await cloudinary.uploader.upload(file.tempFilePath, {
+              folder: 'products', // Optional folder in Cloudinary 
+              public_id: `product_${Date.now()}`, // Optional public ID, can be customized
+          });
+
+          // Update image field with new Cloudinary URL
+          updateFields.image = uploadResult.secure_url;
+
+          // Optionally, delete old image from Cloudinary if needed
+          // const product = await Product.findById(id);
+          // if (product.image) {
+          //     await cloudinary.uploader.destroy(product.image); // Delete old image
+          // }
+      }
+
+      // Update the product in the database
+      const product = await Product.findByIdAndUpdate(id, updateFields, { new: true });
+      
+      // Send success response with updated product data
+      res.status(200).json({ success: true, data: product });
+  } catch (error) {
+      // Handle errors
+      console.error(error);
+      res.status(500).json({ success: false, error: error.message });
+  }
+}
 
 // Controller function to delete a product
 async function deleteProduct(req, res) {

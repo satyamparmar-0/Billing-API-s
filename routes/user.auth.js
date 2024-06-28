@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 const UserController = require('../controllers/user.auth');
 const {restrictToUserLoginOnly,authenticateUser} = require('../middlewares/auth')
-
+const validateSignup = require('../middlewares/signup.validation')
 router.get('/signup',UserController.RenderSignup);
 router.get('/login',UserController.RenderLogin);
 
-router.post('/signup',UserController.Signup);
+router.post('/signup',validateSignup,UserController.Signup);
 router.post('/login',UserController.Login);
 router.post('/logout',UserController.logout)
 router.delete('/deleteUser/:username',UserController.deleteUser);

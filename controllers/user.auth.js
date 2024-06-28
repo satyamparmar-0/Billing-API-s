@@ -29,13 +29,18 @@ exports.RenderLogin = (req,res)=>{
 }
 exports.Signup = async (req, res) => {
     try {
-        const { email, fullname, role, username, password } = req.body;
+        const existingUser = await User.findOne({ email: req.body.email });
+        if (existingUser) {
+          return res.status(400).json({ message: 'Email already exists.' });
+        }
+        const { email, role, username, password,mobileNo, address } = req.body;
         const newUser = new User({
             email,
-            fullname,
             role,
             username,
             password,
+            mobileNo,
+            address
         });
         await newUser.save();
         res.json('User Successfully Created');
