@@ -14,18 +14,18 @@ const storage = multer.diskStorage({
 // Initialize multer upload
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 1000000 }, // File size limit if needed
+  limits: { fileSize: 1000000 },
   fileFilter: function (req, file, cb) {
-    checkFileType(file, cb); // Optional: Check file type if needed
+    checkFileType(file, cb);
   }
-}).single('image'); // 'image' should match the name attribute in your HTML form input for file
+}).single('image');
 
 function checkFileType(file, cb) {
-  // Allowed file extensions
+ 
   const filetypes = /jpeg|jpg|png|gif/;
-  // Check file extension
+  
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime type
+ 
   const mimetype = filetypes.test(file.mimetype);
 
   if (extname && mimetype) {
