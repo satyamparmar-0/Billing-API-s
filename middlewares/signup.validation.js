@@ -13,8 +13,8 @@ const signupValidationSchema = Joi.object({
     'string.empty': 'Username is required.',
     'any.required': 'Username is required.'
   }),
-  password: Joi.string().min(6).required().messages({
-    'string.min': 'Password must be at least 6 characters long.',
+  password: Joi.string().min(8).required().messages({
+    'string.min': 'Password must be at least 8 characters long.',
     'string.empty': 'Password is required.',
     'any.required': 'Password is required.'
   }),

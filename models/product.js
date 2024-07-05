@@ -46,33 +46,29 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: false
       },
-      customizations: [
-        {
-          customizationName: {
-            type: String,
-            required: false
-          },
-          additionalprice: {
-            type: Number,
-            required: false,
-            default: 0.00
+      customizationName: {
+        type: String,
+        required: false
+        },
+        additionalprice: {
+          type: Number,
+          required: false,
+          default: 0.00
           }
-        }
-      ]
     }
   ],
   filters: {
     GlutenFree: {
       type: String,
-      required:false
-      // enum: ['Yes', 'No'],
-      // default: 'No'
+      required:false,
+      enum: ['Yes', 'No'],
+      default: 'No'
     },
     Spicy: {
       type: String,
-      required:false
-      // enum: ['Yes', 'No'],
-      // default: 'No'
+      required:false,
+      enum: ['Yes', 'No'],
+      default: 'No'
     }
   },
   created_at:{

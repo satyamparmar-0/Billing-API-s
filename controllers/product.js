@@ -18,11 +18,11 @@ async function createProduct(req, res) {
     const result = await cloudinary.uploader.upload(file.tempFilePath);
 
     const {
-      itemname, description, baseprice, categoryId, subcategoryId,
+      itemname, description, baseprice, category, subcategory,
       discount, quantityavailable, cuisine, foodtype, customizations, filters
     } = req.body;
 
-    // Parse customizations and filters
+    // Parse customizations and filter
     const parsedCustomizations = JSON.parse(customizations);
     const parsedFilters = JSON.parse(filters);
 
@@ -31,8 +31,8 @@ async function createProduct(req, res) {
       itemname,
       description,
       baseprice,
-      category: categoryId,
-      subcategory: subcategoryId,
+      category,
+      subcategory,
       discount,
       quantityavailable,
       image: result.url,
@@ -79,8 +79,8 @@ async function getAllProducts(req, res) {
 async function updateProduct(req, res) {
   try {
       const { id } = req.params;
-      const { itemname, description, baseprice, categoryId, subcategoryId, discount, quantityavailable, cuisine, foodtype, customizations, filters } = req.body;
-      let updateFields = { itemname, description, baseprice, category: categoryId, subcategory: subcategoryId, discount, quantityavailable, cuisine, foodtype, customizations, filters };
+      const { itemname, description, baseprice, category, subcategory, discount, quantityavailable, cuisine, foodtype, customizations, filters } = req.body;
+      let updateFields = { itemname, description, baseprice, category, subcategory , discount, quantityavailable, cuisine, foodtype, customizations, filters };
 
       // Check if new image file is included in request
       if (req.files && req.files.image) {

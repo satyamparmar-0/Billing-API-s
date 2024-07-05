@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/product');
 const upload = require('../middlewares/cloud.image')
+const validateProduct = require('../middlewares/products.validations')
 // Routes for product CRUD operations
 router.get('/product',(req,res)=>{
     res.render('product')
