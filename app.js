@@ -22,6 +22,14 @@ const cors = require('cors');
 const fileupload = require('express-fileupload')
 var app = express();
 
+const session = require('express-session');
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set to true if using HTTPS
+}));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

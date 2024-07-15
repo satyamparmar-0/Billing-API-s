@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
     // user_id will not be used
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        // required: true
-    },
+    // user_id: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',
+    //     // required: true
+    // },
     items: [{
         product_id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -19,11 +19,11 @@ const OrderSchema = new mongoose.Schema({
         price: {
             type: Number,
         },
-        product_name:{
+        productname:{
             type:String
         },
     }],
-    total_amount: {
+    totalamount: {
         type: Number,
     },
     status: {
